@@ -8,6 +8,7 @@ export default defineConfig({
     env: {
       NODE_ENV: 'test',
       DATABASE_URL: 'postgresql://test:test@localhost:5432/saas_boilerplate_test?schema=public',
+      ACCESS_TOKEN_SECRET: 'test-access-token-secret-at-least-32-characters-long',
     },
   },
 });

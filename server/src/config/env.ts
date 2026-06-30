@@ -22,6 +22,23 @@ const envSchema = z.object({
   /** PostgreSQL connection string (required). */
   DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
 
+  /** Secret used to sign access-token JWTs. Must be long and random. */
+  ACCESS_TOKEN_SECRET: z.string().min(32, 'ACCESS_TOKEN_SECRET must be at least 32 characters'),
+
+  /** Access-token lifetime in seconds (default: 15 minutes). */
+  ACCESS_TOKEN_TTL_SECONDS: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(15 * 60),
+
+  /** Refresh-token lifetime in seconds (default: 30 days). */
+  REFRESH_TOKEN_TTL_SECONDS: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(30 * 24 * 60 * 60),
+
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
 
   /** Comma-separated list of allowed origins, or `*` to allow all. */
