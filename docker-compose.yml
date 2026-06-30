@@ -1,0 +1,31 @@
+# Local development infrastructure.
+#
+# Usage:
+#   docker compose up -d        # start Postgres in the background
+#   docker compose down         # stop (keeps data)
+#   docker compose down -v      # stop and DELETE all data
+#
+# Credentials/ports can be overridden via a root `.env` file (see .env.example);
+# the defaults below are safe for local development only.
+services:
+  postgres:
+    image: postgres:16-alpine
+    container_name: saas_boilerplate_postgres
+    restart: unless-stopped
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER:-saas}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-saas_dev_password}
+      POSTGRES_DB: ${POSTGRES_DB:-saas_boilerplate}
+    ports:
+      - '${POSTGRES_PORT:-5432}:5432'
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+    healthcheck:
+      test: ['CMD-SHELL', 'pg_isready -U ${POSTGRES_USER:-saas} -d ${POSTGRES_DB:-saas_boilerplate}']
+      interval: 5s
+      timeout: 5s
+      retries: 10
+
+volumes:
+  postgres_data:
+    name: saas_boilerplate_postgres_data

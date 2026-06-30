@@ -1,0 +1,51 @@
+// Prisma schema — SaaS Boilerplate Pro
+// Docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+/// An authenticated account.
+model User {
+  id            String   @id @default(uuid()) @db.Uuid
+  email         String   @unique
+  passwordHash  String
+  emailVerified Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  sessions Session[]
+
+  @@map("users")
+}
+
+/// A refresh-token-backed session.
+///
+/// The refresh token itself is never stored — only its hash (`hashedToken`), so
+/// a database leak cannot be used to mint tokens. Sessions are rotated on every
+/// refresh: the old row is revoked (`revokedAt`) and linked to its successor
+/// (`replacedByTokenId`), which lets us detect refresh-token reuse (theft).
+model Session {
+  id          String    @id @default(uuid()) @db.Uuid
+  userId      String    @db.Uuid
+  user        User      @relation(fields: [userId], references: [id], onDelete: Cascade)
+  hashedToken String    @unique
+  expiresAt   DateTime
+  createdAt   DateTime  @default(now())
+  revokedAt   DateTime?
+
+  // Reuse-detection chain (set when this session is rotated).
+  replacedByTokenId String? @db.Uuid
+
+  // Lightweight client fingerprint for session listing / auditing.
+  userAgent String?
+  ipAddress String?
+
+  @@index([userId])
+  @@map("sessions")
+}

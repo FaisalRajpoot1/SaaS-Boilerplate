@@ -19,6 +19,9 @@ const envSchema = z.object({
 
   PORT: z.coerce.number().int().positive().default(4000),
 
+  /** PostgreSQL connection string (required). */
+  DATABASE_URL: z.string().min(1, 'DATABASE_URL is required'),
+
   LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
 
   /** Comma-separated list of allowed origins, or `*` to allow all. */
