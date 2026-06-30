@@ -1,0 +1,226 @@
+/* ===========================================================================
+   Marketing landing — "Technical Blueprint" aesthetic.
+   Self-contained dark theme (independent of the app's light/dark tokens) so the
+   landing always renders with full impact. Scoped under `.landing`.
+   ========================================================================== */
+
+.landing {
+  --ink: #06080d;
+  --ink-2: #0a0e16;
+  --ink-3: #0e131d;
+  --line: rgba(150, 170, 200, 0.1);
+  --line-2: rgba(150, 170, 200, 0.18);
+  --fg: #eef2f8;
+  --muted: #899; /* fallback */
+  --muted: #8a93a6;
+  --muted-2: #5d6677;
+  --accent: #c8f032;
+  --accent-soft: rgba(200, 240, 50, 0.14);
+  --accent-ink: #0a0d04;
+
+  position: relative;
+  min-height: 100vh;
+  background-color: var(--ink);
+  color: var(--fg);
+  font-family: 'Hanken Grotesk', system-ui, sans-serif;
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+/* Graph-paper grid, faded toward the edges. */
+.landing::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  background-image:
+    linear-gradient(var(--line) 1px, transparent 1px),
+    linear-gradient(90deg, var(--line) 1px, transparent 1px);
+  background-size: 64px 64px;
+  mask-image: radial-gradient(ellipse 100% 70% at 50% 0%, #000 35%, transparent 80%);
+  z-index: 0;
+}
+
+/* Fine grain overlay for texture. */
+.landing::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  opacity: 0.025;
+  z-index: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+.landing > * {
+  position: relative;
+  z-index: 1;
+}
+
+.landing-display {
+  font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.02;
+}
+
+.landing-mono {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+}
+
+/* Eyebrow / section index label. */
+.landing-eyebrow {
+  font-family: 'JetBrains Mono', ui-monospace, monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.22em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+/* Accent glow blob. */
+.landing-glow {
+  position: absolute;
+  border-radius: 9999px;
+  filter: blur(80px);
+  background: radial-gradient(circle, var(--accent-soft), transparent 70%);
+  pointer-events: none;
+}
+
+/* Hairline-bordered surface. */
+.landing-card {
+  background: linear-gradient(180deg, var(--ink-2), var(--ink));
+  border: 1px solid var(--line);
+  border-radius: 14px;
+}
+
+.landing-card:hover {
+  border-color: var(--line-2);
+}
+
+/* Primary (accent) button. */
+.landing-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+  height: 2.875rem;
+  padding: 0 1.4rem;
+  border-radius: 9px;
+  font-family: 'Hanken Grotesk', sans-serif;
+  font-weight: 600;
+  font-size: 0.95rem;
+  white-space: nowrap;
+  cursor: pointer;
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.2s ease,
+    background-color 0.2s ease,
+    border-color 0.2s ease;
+}
+
+.landing-btn-primary {
+  background: var(--accent);
+  color: var(--accent-ink);
+  box-shadow: 0 0 0 1px var(--accent);
+}
+
+.landing-btn-primary:hover {
+  transform: translateY(-1px);
+  box-shadow:
+    0 0 0 1px var(--accent),
+    0 8px 30px -8px var(--accent-soft),
+    0 0 40px -6px var(--accent-soft);
+}
+
+.landing-btn-ghost {
+  background: transparent;
+  color: var(--fg);
+  border: 1px solid var(--line-2);
+}
+
+.landing-btn-ghost:hover {
+  border-color: var(--fg);
+  transform: translateY(-1px);
+}
+
+/* Dotted connector / corner ticks for the blueprint feel. */
+.landing-ticks {
+  position: relative;
+}
+.landing-ticks::before,
+.landing-ticks::after {
+  content: '+';
+  position: absolute;
+  color: var(--muted-2);
+  font-family: 'JetBrains Mono', monospace;
+  font-size: 1rem;
+  line-height: 1;
+}
+.landing-ticks::before {
+  top: -7px;
+  left: -7px;
+}
+.landing-ticks::after {
+  bottom: -7px;
+  right: -7px;
+}
+
+/* Scroll-reveal: hidden until `.is-visible` is toggled by IntersectionObserver. */
+.reveal {
+  opacity: 0;
+  transform: translateY(22px);
+  transition:
+    opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
+    transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
+}
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Hero one-shot staggered entrance. */
+@keyframes landing-rise {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.landing-enter {
+  opacity: 0;
+  animation: landing-rise 0.8s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes landing-marquee {
+  from {
+    transform: translateX(0);
+  }
+  to {
+    transform: translateX(-50%);
+  }
+}
+
+.landing-marquee-track {
+  display: flex;
+  width: max-content;
+  animation: landing-marquee 26s linear infinite;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .reveal,
+  .landing-enter {
+    opacity: 1;
+    transform: none;
+    animation: none;
+    transition: none;
+  }
+  .landing-marquee-track {
+    animation: none;
+  }
+}

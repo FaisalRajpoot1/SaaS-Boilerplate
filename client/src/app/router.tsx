@@ -14,6 +14,15 @@ import { RootLayout } from '@/components/layout/root-layout';
  */
 export const router = createBrowserRouter([
   {
+    // Marketing landing — self-contained (own nav/footer), no app chrome.
+    path: '/',
+    errorElement: <RouteErrorBoundary />,
+    lazy: async () => {
+      const { default: Component } = await import('@/pages/marketing/landing-page');
+      return { Component };
+    },
+  },
+  {
     element: <AuthLayout />,
     errorElement: <RouteErrorBoundary />,
     children: [
@@ -41,17 +50,10 @@ export const router = createBrowserRouter([
     ],
   },
   {
-    path: '/',
+    // Authenticated app shell (grows with the product); also hosts the 404.
     element: <RootLayout />,
     errorElement: <RouteErrorBoundary />,
     children: [
-      {
-        index: true,
-        lazy: async () => {
-          const { default: Component } = await import('@/pages/home/home-page');
-          return { Component };
-        },
-      },
       {
         path: '*',
         lazy: async () => {
