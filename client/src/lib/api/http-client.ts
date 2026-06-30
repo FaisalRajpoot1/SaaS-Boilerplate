@@ -34,17 +34,21 @@ function isApiErrorBody(value: unknown): value is ApiErrorBody {
     typeof value === 'object' &&
     value !== null &&
     'error' in value &&
-    typeof (value as { error: unknown }).error === 'object'
+    typeof value.error === 'object'
   );
 }
 
 async function request<T>(path: string, init?: RequestInit): Promise<T> {
+  // Build headers safely (HeadersInit may be an array, Headers, or record), and
+  // only default Content-Type when the caller hasn't set it.
+  const headers = new Headers(init?.headers);
+  if (!headers.has('Content-Type')) {
+    headers.set('Content-Type', 'application/json');
+  }
+
   let response: Response;
   try {
-    response = await fetch(`${env.apiUrl}${path}`, {
-      headers: { 'Content-Type': 'application/json', ...init?.headers },
-      ...init,
-    });
+    response = await fetch(`${env.apiUrl}${path}`, { ...init, headers });
   } catch (cause) {
     // Network-level failure (offline, DNS, CORS, server down).
     throw new ApiError(0, 'NETWORK_ERROR', 'Unable to reach the server.', cause);
@@ -57,7 +61,11 @@ async function request<T>(path: string, init?: RequestInit): Promise<T> {
     if (isApiErrorBody(body)) {
       throw new ApiError(response.status, body.error.code, body.error.message, body.error.details);
     }
-    throw new ApiError(response.status, 'HTTP_ERROR', `Request failed (${String(response.status)})`);
+    throw new ApiError(
+      response.status,
+      'HTTP_ERROR',
+      `Request failed (${String(response.status)})`,
+    );
   }
 
   return body as T;

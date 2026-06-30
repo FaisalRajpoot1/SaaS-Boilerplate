@@ -24,9 +24,7 @@ export default function HomePage(): JSX.Element {
         ) : (
           <p className="mt-1 text-sm">
             <span className="font-medium text-green-600 dark:text-green-400">● {data.status}</span>{' '}
-            <span className="text-muted-foreground">
-              · uptime {Math.round(data.uptime)}s
-            </span>
+            <span className="text-muted-foreground">· uptime {Math.round(data.uptime)}s</span>
           </p>
         )}
       </div>
