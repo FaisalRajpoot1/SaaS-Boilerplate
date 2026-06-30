@@ -1,3 +1,4 @@
+import cookieParser from 'cookie-parser';
 import cors from 'cors';
 import express, { type Express } from 'express';
 import { rateLimit } from 'express-rate-limit';
@@ -45,9 +46,10 @@ export function createApp(): Express {
     }),
   );
 
-  // 4. Body parsers.
+  // 4. Body & cookie parsers.
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
+  app.use(cookieParser());
 
   // 5. Structured per-request logging.
   app.use(requestLogger);
