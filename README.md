@@ -1,5 +1,7 @@
 # SaaS Boilerplate Pro
 
+[![CI](https://github.com/FaisalRajpoot1/SaaS-Boilerplate/actions/workflows/ci.yml/badge.svg)](https://github.com/FaisalRajpoot1/SaaS-Boilerplate/actions/workflows/ci.yml)
+
 A production-grade, commercial-quality SaaS boilerplate — a reusable foundation for
 launching new SaaS products in days. Built to be scalable, secure, modular, and fully
 documented. Nothing here is application-specific; every module is a reusable building block.
