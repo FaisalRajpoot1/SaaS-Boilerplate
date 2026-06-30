@@ -16,10 +16,14 @@ export default defineConfig({
   },
   server: {
     port: 5173,
-    // Proxy API calls to the backend during development so the browser talks to
-    // a single origin (no CORS, no hardcoded API host in the client).
+    // Proxy backend calls during development so the browser talks to a single
+    // origin (no CORS, no hardcoded API host in the client).
     proxy: {
       '/api': {
+        target: 'http://localhost:4000',
+        changeOrigin: true,
+      },
+      '/health': {
         target: 'http://localhost:4000',
         changeOrigin: true,
       },
