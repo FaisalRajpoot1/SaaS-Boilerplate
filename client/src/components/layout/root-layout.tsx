@@ -2,6 +2,8 @@ import type { JSX } from 'react';
 import { Link, Outlet } from 'react-router';
 
 import { ModeToggle } from '@/components/theme/mode-toggle';
+import { buttonVariants } from '@/components/ui/button';
+import { cn } from '@/lib/utils';
 
 /**
  * Application shell.
@@ -17,7 +19,15 @@ export function RootLayout(): JSX.Element {
           <Link to="/" className="font-semibold tracking-tight">
             SaaS Boilerplate Pro
           </Link>
-          <ModeToggle />
+          <div className="flex items-center gap-2">
+            <Link to="/login" className={cn(buttonVariants({ variant: 'ghost', size: 'sm' }))}>
+              Sign in
+            </Link>
+            <Link to="/signup" className={cn(buttonVariants({ size: 'sm' }))}>
+              Sign up
+            </Link>
+            <ModeToggle />
+          </div>
         </div>
       </header>
 

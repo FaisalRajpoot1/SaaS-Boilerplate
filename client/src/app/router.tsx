@@ -1,17 +1,45 @@
 import { createBrowserRouter } from 'react-router';
 
 import { RouteErrorBoundary } from '@/components/errors/route-error-boundary';
+import { AuthLayout } from '@/components/layout/auth-layout';
 import { RootLayout } from '@/components/layout/root-layout';
 
 /**
  * Application route tree.
  *
- * The root route renders the app shell and owns the error boundary, so any error
- * in a child route is caught with consistent UI. Page components are lazily
- * imported so each route is its own code-split chunk. The `*` catch-all renders
- * the 404 page (a matched route, distinct from a thrown error).
+ * Two layout branches: an unauthenticated branch (`AuthLayout`, no app chrome)
+ * for login/signup/reset, and the main app branch (`RootLayout`) which owns the
+ * error boundary and 404 catch-all. Page components are lazily imported so each
+ * route is its own code-split chunk.
  */
 export const router = createBrowserRouter([
+  {
+    element: <AuthLayout />,
+    errorElement: <RouteErrorBoundary />,
+    children: [
+      {
+        path: '/login',
+        lazy: async () => {
+          const { default: Component } = await import('@/pages/auth/login-page');
+          return { Component };
+        },
+      },
+      {
+        path: '/signup',
+        lazy: async () => {
+          const { default: Component } = await import('@/pages/auth/signup-page');
+          return { Component };
+        },
+      },
+      {
+        path: '/forgot-password',
+        lazy: async () => {
+          const { default: Component } = await import('@/pages/auth/forgot-password-page');
+          return { Component };
+        },
+      },
+    ],
+  },
   {
     path: '/',
     element: <RootLayout />,

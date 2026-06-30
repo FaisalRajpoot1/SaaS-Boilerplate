@@ -15,14 +15,14 @@ Tailwind v4, React Router, and TanStack Query.
 
 ## Scripts
 
-| Script                 | Purpose                                               |
-| ---------------------- | ----------------------------------------------------- |
-| `npm run dev`          | Start the Vite dev server (http://localhost:5173)     |
-| `npm run build`        | Type-check (`tsc -b`) then produce a production build |
-| `npm run preview`      | Preview the production build locally                  |
-| `npm run typecheck`    | Type-check without emitting                           |
-| `npm run lint`         | Lint with ESLint (type-aware)                         |
-| `npm run format`       | Format with Prettier                                  |
+| Script              | Purpose                                               |
+| ------------------- | ----------------------------------------------------- |
+| `npm run dev`       | Start the Vite dev server (http://localhost:5173)     |
+| `npm run build`     | Type-check (`tsc -b`) then produce a production build |
+| `npm run preview`   | Preview the production build locally                  |
+| `npm run typecheck` | Type-check without emitting                           |
+| `npm run lint`      | Lint with ESLint (type-aware)                         |
+| `npm run format`    | Format with Prettier                                  |
 
 ## Notes
 
