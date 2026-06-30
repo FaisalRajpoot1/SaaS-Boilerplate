@@ -53,11 +53,42 @@ const envSchema = z.object({
 
   /** Max requests allowed per window, per client. */
   RATE_LIMIT_MAX: z.coerce.number().int().positive().default(100),
+
+  /** Public base URL of the client app — used to build links in emails. */
+  APP_URL: z.string().min(1).default('http://localhost:5173'),
+
+  /** Default "From" address for outbound email. */
+  EMAIL_FROM: z.string().min(1).default('SaaS Boilerplate Pro <no-reply@localhost>'),
+
+  /** Email transport: `console` logs messages (dev); `smtp` actually sends. */
+  EMAIL_TRANSPORT: z.enum(['console', 'smtp']).default('console'),
+
+  // SMTP settings — required only when EMAIL_TRANSPORT=smtp (see refine below).
+  SMTP_HOST: z.string().optional(),
+  SMTP_PORT: z.coerce.number().int().positive().optional(),
+  SMTP_USER: z.string().optional(),
+  SMTP_PASS: z.string().optional(),
+});
+
+const envSchemaWithRefinements = envSchema.superRefine((value, ctx) => {
+  if (value.EMAIL_TRANSPORT !== 'smtp') {
+    return;
+  }
+  const required = ['SMTP_HOST', 'SMTP_PORT', 'SMTP_USER', 'SMTP_PASS'] as const;
+  for (const key of required) {
+    if (value[key] === undefined) {
+      ctx.addIssue({
+        code: 'custom',
+        path: [key],
+        message: `${key} is required when EMAIL_TRANSPORT=smtp`,
+      });
+    }
+  }
 });
 
 export type Env = z.infer<typeof envSchema>;
 
-const parsed = envSchema.safeParse(process.env);
+const parsed = envSchemaWithRefinements.safeParse(process.env);
 
 if (!parsed.success) {
   // The logger depends on validated config, so it isn't available yet — fall
