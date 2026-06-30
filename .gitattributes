@@ -1,0 +1,22 @@
+# Normalize line endings: treat everything as text and check out with LF on all
+# platforms. This eliminates CRLF/LF churn in diffs across Windows/macOS/Linux.
+* text=auto eol=lf
+
+# Binary assets — never normalize or diff these.
+*.png   binary
+*.jpg   binary
+*.jpeg  binary
+*.gif   binary
+*.ico   binary
+*.webp  binary
+*.avif  binary
+*.woff  binary
+*.woff2 binary
+*.ttf   binary
+*.eot   binary
+*.pdf   binary
+
+# Lockfiles: keep LF, but collapse diffs and exclude from language stats.
+package-lock.json -diff linguist-generated=true
+pnpm-lock.yaml    -diff linguist-generated=true
+yarn.lock         -diff linguist-generated=true

@@ -1,0 +1,7 @@
+{
+  // Build configuration: same compiler options as the base tsconfig, but emits
+  // production output and excludes test files. The base `tsconfig.json` keeps
+  // tests in scope so the editor, `typecheck`, and type-aware ESLint can see them.
+  "extends": "./tsconfig.json",
+  "exclude": ["node_modules", "dist", "**/*.test.ts"]
+}

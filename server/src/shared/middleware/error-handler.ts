@@ -36,8 +36,7 @@ export const errorHandler: ErrorRequestHandler = (err, _req, res, _next) => {
 
   // Never expose internal failure details in production.
   const exposeMessage = statusCode < 500 || env.NODE_ENV !== 'production';
-  const message =
-    exposeMessage && err instanceof Error ? err.message : 'Internal server error';
+  const message = exposeMessage && err instanceof Error ? err.message : 'Internal server error';
 
   const body: ErrorResponseBody = { error: { code, message } };
   if (isAppError && err.details !== undefined) {

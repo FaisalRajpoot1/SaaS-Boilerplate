@@ -15,21 +15,21 @@ loadDotenv({ quiet: true });
  * request months later.
  */
 const envSchema = z.object({
-  NODE_ENV: z
-    .enum(['development', 'test', 'production'])
-    .default('development'),
+  NODE_ENV: z.enum(['development', 'test', 'production']).default('development'),
 
   PORT: z.coerce.number().int().positive().default(4000),
 
-  LOG_LEVEL: z
-    .enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent'])
-    .default('info'),
+  LOG_LEVEL: z.enum(['fatal', 'error', 'warn', 'info', 'debug', 'trace', 'silent']).default('info'),
 
   /** Comma-separated list of allowed origins, or `*` to allow all. */
   CORS_ORIGIN: z.string().min(1).default('*'),
 
   /** Rate-limit window in milliseconds (default: 15 minutes). */
-  RATE_LIMIT_WINDOW_MS: z.coerce.number().int().positive().default(15 * 60 * 1000),
+  RATE_LIMIT_WINDOW_MS: z.coerce
+    .number()
+    .int()
+    .positive()
+    .default(15 * 60 * 1000),
 
   /** Max requests allowed per window, per client. */
   RATE_LIMIT_MAX: z.coerce.number().int().positive().default(100),
